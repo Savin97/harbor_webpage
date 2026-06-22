@@ -12,16 +12,10 @@ function loadRecentCalls() {
   fetch('/recent_calls.json')
     .then(r => r.ok ? r.json() : null)
     .then(data => {
-      if (!data) return;
-
-      const cutoff = new Date();
-      cutoff.setDate(cutoff.getDate() - 14);
-
-      const recent = data.calls.filter(c => new Date(c.earnings_date) >= cutoff);
-      if (!recent.length) { el.innerHTML = ''; return; }
+      if (!data || !data.calls.length) return;
 
       const byWeek = {};
-      recent.forEach(c => {
+      data.calls.forEach(c => {
         (byWeek[c.week_start] = byWeek[c.week_start] || []).push(c);
       });
 
